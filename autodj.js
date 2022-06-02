@@ -82,7 +82,6 @@ client.on('connect', function(connection) {
     });
     connection.on('close', function() {
         console.log('Connection Closed');
-        retryConnect();
     });
     connection.on('message', handleMessage);
 });
