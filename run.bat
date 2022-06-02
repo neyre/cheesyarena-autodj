@@ -1,0 +1,2 @@
+node autodj.js
+pause
