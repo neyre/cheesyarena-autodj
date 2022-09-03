@@ -5,6 +5,6 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 loop, 100
 {
-SoundSet, +1
-sleep 20
+Send {Volume_Up}
+sleep 30
 }

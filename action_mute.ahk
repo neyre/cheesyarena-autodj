@@ -3,8 +3,8 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
-loop, 20
+loop, 100
 {
-SoundSet, -5
-sleep 20
+Send {Volume_Down}
+sleep 15
 }

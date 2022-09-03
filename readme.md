@@ -5,7 +5,7 @@ This is a script that automates some of the most common DJ functionality at a FR
 - When switching from score to blank (like when switching to commentators), mute
 
 ## How To
-This script is designed to work on Windows and uses AutoHotkey to control the audio. I'm sure it can be made to work on other platforms with some minor tweaks (a new AutoHotkey binary mostly).
+This script is designed to work on Windows and uses AutoHotkey to control the audio. I'm sure it can be made to work on other platforms with a new method of controlling volume & hotkeys (AutoHotkey is windows-only).
 - Install Node JS
 - Edit the variables at the top of `autodj.js` to point to your Cheesy Arena installation.
 - Run the script with `run.bat`
