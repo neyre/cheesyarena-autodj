@@ -11,7 +11,7 @@ On Windows, the script uses AutoHotkey to command the hotkeys.
 - Run the script with `run_windows.bat`
 
 ## How To (Linux)
-On Linux, the script uses `amixer` for volume and talks to Spotify with the `sp` shell script (that uses dbus to talk to spotify).
+On Linux, the script uses `amixer` for volume and plays/pauses spotify over dbus.
 - Install Node JS
 - Edit the variables at the top of `autodj.js` to point to your Cheesy Arena installation.
 - Run the script with `./run_linux.sh`

@@ -2,17 +2,20 @@
 var WebSocketClient = require('websocket').client;
 const { exec } = require('child_process');
 
-var client = new WebSocketClient();
-var ahk = 'AutoHotkeyU64-v1.1.34.02.exe';
-var initialized = false;
+// Configuration
 // var server = 'localhost:8080'; // For Testing
 // var server = '10.0.0.200:8080'; // Testing
 var server = '10.0.100.5:8080'; // Production
+var ahk = 'AutoHotkeyU64-v1.1.34.02.exe';
 var reconnectTime = 3000;
 var path = '/displays/audience/websocket?displayId=800&overlayLocation=bottom&background=%230f0&reversed=false&nickname=Auto DJ';
+var debug = false;
 
+// Initialize variables
+var initialized = false;
 var last;
 
+// Check OS
 switch(process.platform) {
     case 'linux':
         var os=0;
@@ -40,21 +43,31 @@ switch(process.platform) {
 // logoluma
 //////////////////////////////
 
-function wsConnect(){
-    console.log(' ');
-    console.log('Trying to Connect...');
-    client.connect('ws://'+server+path);
+function action_mute(){
+    if(os == 1)
+        exec(ahk+' win_mute.ahk');
+    else
+        exec('./linux_mute.sh');
 }
-
-function retryConnect(){
-    console.log('Will try again shortly...');
-    setTimeout(wsConnect, reconnectTime);
+function action_unmute(){
+    if(os == 1)
+        exec(ahk+' win_unmute.ahk');
+    else
+        exec('./linux_unmute.sh');
+}
+function action_nexttrack(){
+    if(os == 1)
+        exec(ahk+' win_nexttrack.ahk');
+    else
+        exec('./linux_nexttrack.sh');
 }
 
 function handleMessage(message){
     if (message.type === 'utf8') {
         messData = JSON.parse(message.utf8Data);
-        console.log('          Received Message of Type: '+messData.type);
+
+        if(debug)
+            console.log('          Received Message of Type: '+messData.type);
 
         if(messData.type == 'audienceDisplayMode'){
             next = messData.data;
@@ -63,37 +76,28 @@ function handleMessage(message){
                 initialized = true;
                 last = next;
                 console.log('Initialized!');
+                console.log();
                 return;
             }
 
-            console.log('Transition from: '+last+' to: '+next);
+            if(last === next)
+                return;
+            console.log('Transition ('+last+' -> '+next+')');
 
-            if(next === 'blank' && last === 'score'){
-                if(os == 1)
-                    exec(ahk+' win_mute.ahk');
-                else
-                    exec('./linux_mute.sh');
-                console.log('Muting Audio!');
-            }else if(next === 'blank' && last === 'bracket'){
-                if(os == 1)
-                    exec(ahk+' win_mute.ahk');
-                else
-                    exec('./linux_mute.sh');
-                console.log('Muting Audio!');
-            }else if(next === 'intro'){
-                if(os == 1)
-                    exec(ahk+' win_unmute.ahk');
-                else
-                    exec('./linux_unmute.sh');
-                console.log('Unmuting Audio!');
-            }else if(next === 'match'){
-                if(os == 1)
-                    exec(ahk+' win_nexttrack.ahk');
-                else
-                    exec('./linux_nexttrack.sh');
-                console.log('Next Track!');
+            // Map transitions to sound behaviors.
+            if(next === 'blank' && (last === 'score' || last === 'bracket')){
+                console.log('   MUTE (Going to RSN after score)');
+                action_mute();
             }
-
+            else if(next === 'intro'){
+                console.log('   UNMUTE (Back to Field for Intros)');
+                action_unmute();
+            }
+            else if(next === 'match'){
+                console.log('   NEXT TRACK (Match start)');
+                action_nexttrack();
+            }
+            
             last = next;
 
         }
@@ -101,6 +105,7 @@ function handleMessage(message){
 }
 
 // Setup and Connect Websocket Client
+var client = new WebSocketClient();
 client.on('connectFailed', function(error) {
     console.log('Connect Error: ' + error.toString());
     retryConnect();
@@ -116,5 +121,13 @@ client.on('connect', function(connection) {
     });
     connection.on('message', handleMessage);
 });
-
+function wsConnect(){
+    console.log(' ');
+    console.log('Trying to Connect...');
+    client.connect('ws://'+server+path);
+}
+function retryConnect(){
+    console.log('Will try again shortly...');
+    setTimeout(wsConnect, reconnectTime);
+}
 wsConnect();
