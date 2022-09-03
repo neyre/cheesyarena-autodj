@@ -6,17 +6,33 @@ var client = new WebSocketClient();
 var ahk = 'AutoHotkeyU64-v1.1.34.02.exe';
 var initialized = false;
 // var server = 'localhost:8080'; // For Testing
+// var server = '10.0.0.200:8080'; // Testing
 var server = '10.0.100.5:8080'; // Production
 var reconnectTime = 3000;
 var path = '/displays/audience/websocket?displayId=800&overlayLocation=bottom&background=%230f0&reversed=false&nickname=Auto DJ';
 
 var last;
 
+switch(process.platform) {
+    case 'linux':
+        var os=0;
+        console.log('OS Detected: Linux');
+        break;
+    case 'win32':
+        var os=1;
+        console.log('OS Detected: Windows');
+        break;
+    default:
+        console.log('Unsupported OS.');
+        process.exit();
+}
+
 ////// Possible States ///////
 // blank
 // intro
 // match
 // score
+// bracket
 // logo
 // sponsor
 // allianceSelection
@@ -53,16 +69,28 @@ function handleMessage(message){
             console.log('Transition from: '+last+' to: '+next);
 
             if(next === 'blank' && last === 'score'){
-                exec(ahk+' action_mute.ahk');
+                if(os == 1)
+                    exec(ahk+' win_mute.ahk');
+                else
+                    exec('./linux_mute.sh');
                 console.log('Muting Audio!');
             }else if(next === 'blank' && last === 'bracket'){
-                exec(ahk+' action_mute.ahk');
+                if(os == 1)
+                    exec(ahk+' win_mute.ahk');
+                else
+                    exec('./linux_mute.sh');
                 console.log('Muting Audio!');
             }else if(next === 'intro'){
-                exec(ahk+' action_unmute.ahk');
+                if(os == 1)
+                    exec(ahk+' win_unmute.ahk');
+                else
+                    exec('./linux_unmute.sh');
                 console.log('Unmuting Audio!');
             }else if(next === 'match'){
-                exec(ahk+' action_nexttrack.ahk');
+                if(os == 1)
+                    exec(ahk+' win_nexttrack.ahk');
+                else
+                    exec('./linux_nexttrack.sh');
                 console.log('Next Track!');
             }
 

@@ -4,8 +4,17 @@ This is a script that automates some of the most common DJ functionality at a FR
 - When the match intro screen is shown, turn up the volume again (like when coming back from commentators).
 - When switching from score to blank (like when switching to commentators), mute
 
-## How To
-This script is designed to work on Windows and uses AutoHotkey to control the audio. I'm sure it can be made to work on other platforms with a new method of controlling volume & hotkeys (AutoHotkey is windows-only).
+## How To (Windows)
+On Windows, the script uses AutoHotkey to command the hotkeys.
 - Install Node JS
 - Edit the variables at the top of `autodj.js` to point to your Cheesy Arena installation.
-- Run the script with `run.bat`
+- Run the script with `run_windows.bat`
+
+## How To (Linux)
+On Linux, the script uses `amixer` for volume and talks to Spotify with the `sp` shell script (that uses dbus to talk to spotify).
+- Install Node JS
+- Edit the variables at the top of `autodj.js` to point to your Cheesy Arena installation.
+- Run the script with `./run_linux.sh`
+
+## Other OS
+This script hasn't currently been implemented on Mac.
