@@ -55,6 +55,9 @@ function handleMessage(message){
             if(next === 'blank' && last === 'score'){
                 exec(ahk+' action_mute.ahk');
                 console.log('Muting Audio!');
+            }else if(next === 'blank' && last === 'bracket'){
+                exec(ahk+' action_mute.ahk');
+                console.log('Muting Audio!');
             }else if(next === 'intro'){
                 exec(ahk+' action_unmute.ahk');
                 console.log('Unmuting Audio!');
