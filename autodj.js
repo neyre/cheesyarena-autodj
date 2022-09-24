@@ -118,6 +118,8 @@ client.on('connect', function(connection) {
     });
     connection.on('close', function() {
         console.log('Connection Closed');
+        console.log('Retrying...');
+        retryConnect();
     });
     connection.on('message', handleMessage);
 });
