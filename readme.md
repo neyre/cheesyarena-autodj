@@ -4,6 +4,8 @@ This is a script that automates some of the most common DJ functionality at a FR
 - When the match intro screen is shown, turn up the volume again (like when coming back from commentators).
 - When switching from score to blank (like when switching to commentators), mute
 
+NOTE: while this is not an official part of Cheesy Arena and is not officially maintained, it has been tested to work with versions of Cheesy Arena from 2022-2023. Use at your own risk.
+
 ## How To (Windows)
 On Windows, the script uses AutoHotkey to command the hotkeys.
 - Install Node JS
